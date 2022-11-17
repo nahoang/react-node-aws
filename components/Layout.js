@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Head from 'next/head';
+import Link from 'next/link';
 
 const Layout = ({children}) => {
 
@@ -10,9 +11,22 @@ const Layout = ({children}) => {
 
   const nav = () => (
     <ul className="nav nav-tabs bg-warning">
-      <li className="nav-item"><a className="nav-link text-dark"  href="">Home</a></li>
-      <li className="nav-item"><a className="nav-link text-dark" href="">Login</a></li>
-      <li className="nav-item"><a className="nav-link text-dark" href="">Register</a></li>
+      <li className="nav-item">
+        <Link href="/" legacyBehavior>
+        <a className="nav-link text-dark">Home</a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link href="/login" legacyBehavior>
+        <a className="nav-link text-dark">Login</a>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link href="/register" legacyBehavior>
+        <a className="nav-link text-dark">Register</a>
+        </Link>
+      </li>
+    
     </ul>
   )
   
