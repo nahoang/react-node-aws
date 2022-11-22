@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import { showErrorMessage, showSuccessMessage } from '../helpers/alerts';
 import { API } from '../config';
-
+import { isAuth } from '../helpers/auth';
+import Router from 'next/router';
 
 const Register = () => {
   const [state, setState] = useState({
@@ -16,6 +17,10 @@ const Register = () => {
   })
 
   const {name, email, password, error, success, buttonText} = state;
+
+  useEffect(() => {
+    isAuth() && Router.push('/');
+  }, [])
 
   const handleChange = (name) => (e) =>{
     setState({...state, [name]: e.target.value, error: '', success: '', buttonText: 'Register' })

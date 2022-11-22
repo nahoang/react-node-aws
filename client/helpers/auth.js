@@ -20,7 +20,7 @@ export const removeCookie = (key) => {
 //will be useful when we need to make request to server with auth token
 export const getCookie = key => {
   if (process.browser) {
-    return cookie.get('key')
+    return cookie.get(key)
   }
 }
 
@@ -55,8 +55,8 @@ export const isAuth = () => {
   if(process.browser) {
     const cookieChecked = getCookie('token')
     if(cookieChecked) {
-      if(localStorage.getIte('user')) {
-        return JSON.parse(localStorage.get('user'));
+      if(localStorage.getItem('user')) {
+        return JSON.parse(localStorage.getItem('user'));
       } else {
         return false;
       }

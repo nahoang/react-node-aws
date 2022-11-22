@@ -5,7 +5,7 @@ import Router from 'next/router'
 import axios from 'axios';
 import { showErrorMessage, showSuccessMessage } from '../helpers/alerts';
 import { API } from '../config';
-import { authenticate } from '../helpers/auth';
+import { authenticate, isAuth } from '../helpers/auth';
 
 
 const Login = () => {
@@ -16,6 +16,10 @@ const Login = () => {
     success: '',
     buttonText: 'Login'
   });
+
+  useEffect(() => {
+    isAuth() && Router.push('/');
+  }, [])
 
   const {email, password, error, success, buttonText} = state;
 
@@ -34,7 +38,7 @@ const Login = () => {
     })
     // console.log(response);  //data > token / user
     authenticate(response, () => {
-      Router.push('/');
+      isAuth() && isAuth().role === 'admin' ? Router.push('/admin') : Router.push('/user')
     })
 
     } catch(error) {
@@ -67,6 +71,7 @@ const Login = () => {
     
     <div className="col-md-6 offset-md-3">
       <h1>Login</h1>
+      {JSON.stringify(isAuth())}
       <br />
       {success && showSuccessMessage(success)}
     {error && showErrorMessage(error)}
