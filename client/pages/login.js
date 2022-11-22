@@ -31,7 +31,7 @@ const Login = () => {
         email,
         password
     })
-    console.log(response);
+    console.log(response);  //data > token /user
     } catch(error) {
       setState({...state, buttonText: 'Login', error: error.response.data.error})
     }
