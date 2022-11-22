@@ -5,6 +5,7 @@ import Router from 'next/router'
 import axios from 'axios';
 import { showErrorMessage, showSuccessMessage } from '../helpers/alerts';
 import { API } from '../config';
+import { authenticate } from '../helpers/auth';
 
 
 const Login = () => {
@@ -31,7 +32,11 @@ const Login = () => {
         email,
         password
     })
-    console.log(response);  //data > token /user
+    // console.log(response);  //data > token / user
+    authenticate(response, () => {
+      Router.push('/');
+    })
+
     } catch(error) {
       setState({...state, buttonText: 'Login', error: error.response.data.error})
     }
