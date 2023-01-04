@@ -70,16 +70,16 @@ exports.create = (req, res) => {
         res.status(400).json({error: 'Upload to s3 failed'})
       }
       console.log('AWS UPLOAD RES DATA', data)
-      // category.image.url = data.Location
-      // category.image.key = data.Key
+      category.image.url = data.Location
+      category.image.key = data.Key
 
       // // save to db
-      // category.save((err, success) => {
-      //   if (err) {
-      //     res.status(400).json({error: 'Error saving category to db'})
-      //   }
-      //   return res.json(success)
-      // })
+      category.save((err, success) => {
+        if (err) {
+          res.status(400).json({error: 'Error saving category to db'})
+        }
+        return res.json(success)
+      })
     })
   })
 }
