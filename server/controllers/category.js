@@ -37,53 +37,56 @@ const s3 = new AWS.S3({
 //   })
 // }
 
+
 exports.create = (req, res) => {
-  let form = new formidable.IncomingForm()
-  form.parse(req, (err, fields, files) => {
-    if(err) {
-      return res.status(400).json({
-        error: "Image could not upload"
-      })
-    }
-    // console.table({err, fields, files})
-    const {name, content} = fields
-    const {image} = files
-
-    const slug = slugify(name);
-    let category = new Category({name, content, slug});
-    if (image.size > 2000000) {
-      return res.status(400).json({
-        error: "Image should be less than 2mb"
-      })
-    }
-    //upload image to s3
-    const params = {
-      Bucket: 'hackr-nahoang',
-      Key: `category/${uuidv4()}`,
-      Body: fs.readFileSync(image.path),
-      ACL: 'public-read',
-      ContentType: `image/jpg`
-    }
-
-    s3.upload(params, (err, data) => {
-      if(err) {
-        console.log(err);
-        res.status(400).json({error: 'Upload to s3 failed'})
-      }
-      console.log('AWS UPLOAD RES DATA', data)
-      category.image.url = data.Location
-      category.image.key = data.Key
-
-      // // save to db
-      category.save((err, success) => {
+    let form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
         if (err) {
-          res.status(400).json({error: 'Error saving category to db'})
+            return res.status(400).json({
+                error: 'Image could not upload'
+            });
         }
-        return res.json(success)
-      })
-    })
-  })
-}
+        // console.table({err, fields, files})
+        const { name, content } = fields;
+        const { image } = files;
+
+        const slug = slugify(name);
+        let category = new Category({ name, content, slug });
+
+        if (image.size > 2000000) {
+            return res.status(400).json({
+                error: 'Image should be less than 2mb'
+            });
+        }
+        // upload image to s3
+        const params = {
+            Bucket: 'hackr-kaloraat',
+            Key: `category/${uuidv4()}`,
+            Body: fs.readFileSync(image.path),
+            ACL: 'public-read',
+            ContentType: `image/jpg`
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({ error: 'Upload to s3 failed' });
+            }
+            console.log('AWS UPLOAD RES DATA', data);
+            category.image.url = data.Location;
+            category.image.key = data.Key;
+
+            // save to db
+            category.save((err, success) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({ error: 'Duplicate category' });
+                }
+                return res.json(success);
+            });
+        });
+    });
+};
 
 exports.list = (req, res) => {
   //
