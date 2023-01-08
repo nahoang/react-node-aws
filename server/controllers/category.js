@@ -3,6 +3,7 @@ const slugify = require('slugify');
 const formidable = require('formidable');
 const uuidv4 = require('uuid/v4');
 const AWS = require('aws-sdk');
+const fs = require('fs');
 
 //s3
 const s3 = new AWS.S3({
@@ -59,7 +60,7 @@ exports.create = (req, res) => {
     const params = {
       Bucket: 'hackr-nahoang',
       Key: `category/${uuidv4()}`,
-      Body: image.path,
+      Body: fs.readFileSync(image.path),
       ACL: 'public-read',
       ContentType: `image/jpg`
     }
