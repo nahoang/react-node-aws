@@ -60,7 +60,7 @@ exports.create = (req, res) => {
         }
         // upload image to s3
         const params = {
-            Bucket: 'hackr-kaloraat',
+            Bucket: 'hackr-nahoang',
             Key: `category/${uuidv4()}`,
             Body: fs.readFileSync(image.path),
             ACL: 'public-read',
